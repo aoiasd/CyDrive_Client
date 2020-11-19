@@ -1,0 +1,86 @@
+﻿<Window x:Class="CyDrive.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="CyDrive" Height="600" Width="800" 
+		Loaded="Window_Loaded">
+
+	<Window.Resources>
+		<ContextMenu x:Key="RemoteFileListBoxMenu">
+			<MenuItem Header="下载" Click="Download"/>
+			<MenuItem Header="删除" Click="Delete_Remote"/>
+		</ContextMenu>
+
+		<ContextMenu x:Key="LocalFileListBoxMenu">
+			<MenuItem Header="上传" Click="Upload"/>
+			<MenuItem Header="删除" Click="Delete_Local"/>
+		</ContextMenu>
+
+		<CollectionViewSource x:Key="LocalFileListViewData"
+							  Source="{Binding Source={x:Static Application.Current}}"/>
+
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="8*"/>
+			<RowDefinition Height="1*"/>
+			<RowDefinition Height="1*"/>
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="2*"/>
+		</Grid.ColumnDefinitions>
+
+		<ListView Name="RemoteFileListBox" 
+				 Grid.Row="1"
+					 Grid.Column="0"
+					 Margin="10"
+				 ContextMenu="{StaticResource RemoteFileListBoxMenu}"
+				 MouseDoubleClick="Download" 
+         SelectionMode="Extended">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="Name" Width="180" DisplayMemberBinding="{Binding Name}"/>
+					<GridViewColumn Header="Size" DisplayMemberBinding="{Binding FileSize}"/>
+				</GridView>
+			</ListView.View>
+		</ListView>
+
+		<ListView  Name="LocalFileListBox"
+				  Grid.Row="1"
+				  Grid.Column="3"
+				  Margin="10"
+				  ContextMenu="{StaticResource LocalFileListBoxMenu}"
+				  MouseDoubleClick="OpenFileWithDefaultProgram"
+				  AllowDrop="True"
+				  Drop="LocalFileListBox_Drop" 
+          SelectionMode="Extended">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="Name" Width="180" DisplayMemberBinding="{Binding Name}"/>
+					<GridViewColumn Header="Size" DisplayMemberBinding="{Binding FileSize}"/>
+				</GridView>
+			</ListView.View>
+		</ListView>
+
+		<StackPanel Grid.Row="1"
+					 Grid.Column="1" Grid.ColumnSpan="2"
+					VerticalAlignment="Center">
+			<ProgressBar x:Name="ProgressBar"
+					 Height="30"
+					 Margin="5,0"
+					/>
+			<Label Name="TransFileNameLabel" 
+				   HorizontalAlignment="Center"
+				   FontSize="16"
+				   >FileName</Label>
+		</StackPanel>
+		
+	</Grid>
+</Window>
